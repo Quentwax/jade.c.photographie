@@ -46,23 +46,23 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 46px;
-    height: 46px;
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.12);
+    /* make controls simple arrows without circular background */
+    width: auto;
+    height: auto;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
     color: #fff;
-    font-size: 1.2rem;
+    font-size: 2.1rem;
     line-height: 1;
     cursor: pointer;
-    backdrop-filter: blur(4px);
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition: transform 0.18s ease, color 0.18s ease;
     z-index: 3;
 }
 
 .carousel-control:hover {
-    background: rgba(255, 255, 255, 0.25);
-    transform: translateY(-50%) scale(1.04);
+    transform: translateY(-50%);
 }
 
 .carousel-control.prev {
@@ -152,6 +152,92 @@ button {
     height: 100%;
 }
 
+.carousel-dots {
+    position: absolute;
+    bottom: 154px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 18px;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 999px;
+    z-index: 7;
+}
+
+.carousel-dots span {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.carousel-dots span:hover {
+    transform: scale(1.1);
+}
+
+.carousel-dots span.active {
+    color: #ffffff;
+}
+
+.gallery-item img {
+    cursor: pointer;
+}
+
+.gallery-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 9999;
+    padding: 20px;
+}
+
+.gallery-modal.open {
+    display: flex;
+}
+
+.gallery-modal-content {
+    position: relative;
+    max-width: 95vw;
+    max-height: 95vh;
+    background: #111;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+.gallery-modal-content img {
+    width: 100%;
+    height: auto;
+    max-height: 90vh;
+    display: block;
+    object-fit: contain;
+}
+
+.gallery-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    color: #111;
+    font-size: 1.55rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
 @media (max-width: 768px) {
     .carousel-cloud { height: 100px; }
 }
@@ -170,16 +256,20 @@ button {
 .carousel-title h1 {
     margin: 0;
     color: #fff;
-    font-family: "Segoe UI", sans-serif;
-    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(2rem, 6.5vw, 4.2rem);
     font-weight: 700;
-    text-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.55);
 }
 
 .carousel-subtitle {
     margin: 6px 0 0;
     color: #fff;
-    font-size: clamp(0.9rem, 1.6vw, 1.2rem);
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(1.3rem, 2.8vw, 2.4rem);
+    margin-top: 8px;
     text-shadow: 0 6px 18px rgba(0,0,0,0.45);
 }
 
@@ -367,16 +457,20 @@ footer {
   position: fixed;
   right: 20px;
   bottom: 20px;
-  width: 46px;
-  height: 46px;
-  border: none;
-  border-radius: 50%;
-  background-color: #8a6e57;
-  color: #fff;
-  font-size: 1.3rem;
-  cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
-  z-index: 1000;
+    width: 46px;
+    height: 46px;
+    border: none;
+    border-radius: 50%;
+    background-color: #8a6e57;
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
 
 .scroll-top:hover {
@@ -458,10 +552,7 @@ button {
     transition: 0.2s;
 }
 
-button:hover {
-    background: #ffe7b0;
-    transform: scale(1.05);
-}
+
 
 .reset-btn {
     background: #d9534f;
@@ -609,40 +700,35 @@ button:hover {
 
 .carousel-img{
     transition: opacity .6s ease;
-}
-
-.carousel-img.fade {
-    opacity: 0;
-}
-
-.carousel-dots{
-    position:absolute;
-    bottom:30px;
-    left:50%;
-    transform:translateX(-50%);
-
-    display:flex;
-    gap:12px;
-
-    z-index:5;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
 }
 
 .dot{
     font-size:26px;
-    color:white;
+    color:#f8f6f2;
+    text-shadow: 0 0 8px rgba(0,0,0,0.45);
     cursor:pointer;
-    transition:.3s;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.dot.active{
+    transform: scale(1.2);
+    color: #ffffff;
 }
 
 .dot:hover{
-    transform:scale(1.2);
+    transform: none;
 }
 
 .reviews{
 
     background:#f8f6f2;
 
-    padding:120px 8%;
+    padding:100px 8%;
 
     position:relative;
 
@@ -884,5 +970,247 @@ button:hover {
     transform:translateY(-20px) scale(1.04);
 
     z-index:10;
+
+}
+
+/* =======================
+      SECTION CONTACT
+======================= */
+
+.contact{
+
+    position:relative;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:120px 8%;
+
+    background:#f8f6f2;
+
+    overflow:hidden;
+
+}
+
+/* Halo */
+
+.contact::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:700px;
+    height:700px;
+
+    border-radius:50%;
+
+    background:#dcccb8;
+
+    right:-180px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    filter:blur(100px);
+
+    opacity:.5;
+
+}
+
+
+/* =======================
+         TEXTE
+======================= */
+
+.contact-content{
+
+    width:42%;
+
+    position:relative;
+
+    z-index:5;
+
+}
+
+.contact-btn{
+
+    display:inline-block;
+
+    padding:18px 45px;
+
+    border-radius:999px;
+
+    background:white;
+
+    color:#222;
+
+    text-decoration:none;
+
+    font-size:clamp(2.8rem,4vw,4.4rem);
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-weight:700;
+
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+}
+
+.contact-btn:hover{
+
+    transform:translateY(-5px);
+
+    background:#dcccb8;
+
+}
+
+.contact-content p{
+
+    margin-top:35px;
+
+    width:min(620px,100%);
+
+    color:#8a6e57;
+
+    font-size:clamp(1.3rem,1.6vw,2rem);
+
+    line-height:1.6;
+
+    font-style:italic;
+
+}
+
+
+/* =======================
+       POLAROID
+======================= */
+
+.polaroid-contact{
+
+    position:relative;
+
+    width:420px;
+
+    background:white;
+
+    padding:22px 22px 95px;
+
+    border-radius:4px;
+
+    transform:rotate(5deg);
+
+    box-shadow:
+        0 30px 60px rgba(0,0,0,.18);
+
+    z-index:3;
+
+    transition:.4s;
+
+}
+
+.polaroid-contact:hover{
+
+    transform:rotate(2deg) translateY(-8px);
+
+}
+
+.polaroid-contact img{
+
+    width:100%;
+
+    display:block;
+
+    aspect-ratio:3/4;
+
+    object-fit:cover;
+
+}
+
+
+/* Faux scotch */
+
+.tape{
+
+    position:absolute;
+
+    top:-16px;
+
+    left:50%;
+
+    transform:translateX(-50%) rotate(-6deg);
+
+    width:120px;
+
+    height:35px;
+
+    background:#dcccb8;
+
+    opacity:.8;
+
+    border-radius:4px;
+
+}
+
+
+/* Petite signature */
+
+.polaroid-contact::after{
+
+    content:"Jade";
+
+    position:absolute;
+
+    bottom:28px;
+
+    right:25px;
+
+    font-family:"Caveat",cursive;
+
+    font-size:2rem;
+
+    color:#8a6e57;
+
+}
+
+
+/* =======================
+      RESPONSIVE
+======================= */
+
+@media(max-width:1100px){
+
+.contact{
+
+    flex-direction:column;
+
+    text-align:center;
+
+    padding:80px 30px;
+
+}
+
+.contact-content{
+
+    width:100%;
+
+}
+
+.contact-content p{
+
+    margin:35px auto 60px;
+
+}
+
+.polaroid-contact{
+
+    width:min(430px,90vw);
+
+    transform:none;
+
+}
 
 }

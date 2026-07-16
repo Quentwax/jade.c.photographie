@@ -7,10 +7,12 @@
 	<title>Jade Photographie</title>
 	<link rel="icon" href="favicon.png">
 
-	 <link rel="preconnect" href="https://fonts.googleapis.com">
-	 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-	 <link href="style.css" rel="stylesheet" />
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+     <link href="style.css" rel="stylesheet" />
 	 <style>
 	  body {
 	  background-color: #f8f6f2;
@@ -25,17 +27,16 @@
 
 
 <div id="carousel">
-    <a id="image-link" href="spoilers.html" target="_blank">
-        <img id="image" src="images/carrousel.jpg" alt="Image du carrousel" class="carousel-img"/>
-    </a>
+    <img id="image" src="images/carrousel.jpg" alt="Image du carrousel" class="carousel-img"/>
 
     <button class="carousel-control prev" onclick="previousImage()" aria-label="Actualité précédente">←</button>
     <button class="carousel-control next" onclick="nextImage()" aria-label="Actualité suivante">→</button>
 
     <div class="carousel-dots">
-    <span class="dot active">★</span>
-    <span class="dot">☆</span>
-</div>
+        <span class="dot active">★</span>
+        <span class="dot">☆</span>
+        <span class="dot">☆</span>
+    </div>
 
     <nav class="carousel-menu" aria-label="Menu principal">
         <a href="index.html">Accueil</a>
@@ -49,12 +50,19 @@
     <!-- Centered title over the carousel image -->
     <div class="carousel-title" aria-hidden="false">
         <h1>Jade Candélibes</h1>
-        <p class="carousel-subtitle">Photographe Amatrice</p>
+        <p class="carousel-subtitle">photographe amatrice</p>
     </div>
     <div class="carousel-cloud" aria-hidden="true">
         <svg viewBox="0 0 1200 140" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0,60 C150,90 300,30 450,60 C620,105 780,35 930,65 C1040,90 1120,40 1200,55 L1200,140 L0,140 Z" fill="#f8f6f2" />
         </svg>
+    </div>
+</div>
+
+<div id="gallery-modal" class="gallery-modal" aria-hidden="true">
+    <div class="gallery-modal-content" role="dialog" aria-modal="true" aria-label="Photo agrandie">
+        <button class="gallery-modal-close" aria-label="Fermer l'aperçu">×</button>
+        <img id="gallery-modal-image" src="" alt="">
     </div>
 </div>
 
@@ -70,8 +78,8 @@ body {
 
 const images = [
 	"images/carrousel.jpg",
-    "images/carrousel_2.jpg ",
-    "images/carrousel_3.jpg ",
+    "images/carrousel_2.jpg",
+    "images/carrousel_3.jpg",
 ];
 
 const links = [
@@ -83,18 +91,24 @@ let index = 0;
 
 function updateCarousel() {
     const image = document.getElementById("image");
-    const link = document.getElementById("image-link");
 
+    const newSrc = images[index];
     image.style.opacity = "0";
 
     setTimeout(() => {
-        image.onload = () => {
-            image.style.opacity = "1";
-        };
+        const show = () => { image.style.opacity = "1"; };
 
-        image.src = images[index];
-        link.href = links[index];
+        // If the image element already has the same src (or attribute), just show it
+        const currentAttr = image.getAttribute('src');
+        if (currentAttr && currentAttr.trim() === newSrc.trim() && image.complete) {
+            show();
+            return;
+        }
+
+        image.onload = show;
+        image.src = newSrc;
     }, 300);
+
     updateDots();
 }
 
@@ -192,7 +206,36 @@ function previousImage() {
 
 </section>
 
-<img class="separator-image" src="images/double_text_separator.png" alt="Séparateur de texte" />
+<section class="contact">
+
+    <div class="contact-content">
+
+        <a href="#contact" class="contact-btn">
+            Contactez moi
+        </a>
+
+        <p>
+            J'ai hâte d'échanger avec vous et de capturer
+            ensemble de magnifiques souvenirs qui vous
+            accompagneront toute une vie.
+        </p>
+
+    </div>
+
+    <div class="polaroid-contact">
+
+        <div class="tape"></div>
+
+        <img src="images/jade.jpg" alt="Jade">
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<img class="separator-image" src="images/double_text_separator (1).png" alt="Séparateur de texte" />
 <p class="footer-brand">@JADE.C PHOTOGRAPHIE</p>
 
 <footer class="site-footer">
@@ -200,7 +243,7 @@ function previousImage() {
     <p class="footer-title">Pour me contacter :</p>
 
     <div class="footer-socials">
-        <a class="socials" href="https://mail.google.com/mail/?view=cm&amp;to=quentwax76@gmail.com" target="_blank">
+        <a class="socials" href="https://mail.google.com/mail/?view=cm&amp;to=jaadeplbphoto@gmail.com" target="_blank">
             <img src="images/logo_gmail.png" alt="Envoyer un mail">
         </a>
 
@@ -228,6 +271,8 @@ function previousImage() {
 </footer>
 
 <button class="scroll-top" onclick="scrollToTop()" aria-label="Remonter en haut de la page">↑</button>
+
+<script src="script.js"></script>
 
 </body>
 </html>

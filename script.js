@@ -1,60 +1,72 @@
-const slides = document.querySelectorAll(".slide");
-const etoiles = document.querySelectorAll(".etoiles span");
+﻿let dots;
 
-let index = 0;
-
-function afficherSlide(i){
-
-    slides.forEach(slide => slide.classList.remove("active"));
-    etoiles.forEach(e => e.classList.remove("active"));
-
-    slides[i].classList.add("active");
-    etoiles[i].classList.add("active");
-
-    etoiles.forEach((e, position)=>{
-
-        e.innerHTML = position === i ? "★" : "☆";
-
+function updateDots() {
+    if (!dots) return;
+    dots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === index);
+        dot.innerHTML = i === index ? "★" : "☆";
     });
-
 }
 
-etoiles.forEach((etoile, position)=>{
+document.addEventListener("DOMContentLoaded", () => {
+    dots = document.querySelectorAll(".dot");
+    const galleryImages = document.querySelectorAll(".gallery-item img");
+    const galleryModal = document.getElementById("gallery-modal");
+    const galleryModalImage = document.getElementById("gallery-modal-image");
+    const galleryModalClose = document.querySelector(".gallery-modal-close");
 
-    etoile.addEventListener("click",()=>{
-
-        index = position;
-        afficherSlide(index);
-
-    });
-
-});
-
-setInterval(()=>{
-
-    index++;
-
-    if(index >= slides.length){
-
-        index = 0;
-
+    function attachDotListeners() {
+        dots.forEach((dot, position) => {
+            dot.addEventListener("click", () => {
+                index = position;
+                updateCarousel();
+            });
+        });
     }
 
-    afficherSlide(index);
+    function openGalleryModal(src, alt) {
+        galleryModalImage.src = src;
+        galleryModalImage.alt = alt || "Photo agrandie";
+        galleryModal.classList.add("open");
+        galleryModal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+    }
 
-},5000);
+    function closeGalleryModal() {
+        galleryModal.classList.remove("open");
+        galleryModal.setAttribute("aria-hidden", "true");
+        galleryModalImage.src = "";
+        galleryModalImage.alt = "";
+        document.body.classList.remove("modal-open");
+    }
 
-const dots = document.querySelectorAll(".dot");
-
-function updateDots(){
-
-    dots.forEach((dot,i)=>{
-
-        dot.innerHTML = (i===index) ? "★" : "☆";
-
+    galleryImages.forEach((image) => {
+        image.addEventListener("click", () => {
+            openGalleryModal(image.src, image.alt);
+        });
     });
 
-}
+    if (galleryModalClose) {
+        galleryModalClose.addEventListener("click", closeGalleryModal);
+    }
+
+    if (galleryModal) {
+        galleryModal.addEventListener("click", (event) => {
+            if (event.target === galleryModal) {
+                closeGalleryModal();
+            }
+        });
+    }
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && galleryModal && galleryModal.classList.contains("open")) {
+            closeGalleryModal();
+        }
+    });
+
+    attachDotListeners();
+    updateDots();
+});
 
 function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
