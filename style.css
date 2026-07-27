@@ -398,6 +398,125 @@ footer {
   margin: 0 auto 12px;
 }
 
+.contact-hero {
+  height: min(70vh, 620px);
+}
+
+.contact-page-section {
+  display: grid;
+  grid-template-columns: 1.5fr 0.9fr;
+  gap: 24px;
+  width: min(1100px, 92vw);
+  margin: 40px auto 48px;
+  align-items: start;
+}
+
+.contact-card,
+.contact-info-card {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(138, 110, 87, 0.18);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.contact-card h2,
+.contact-info-card h3 {
+  margin-top: 0;
+  color: #6b4f3b;
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.03em;
+}
+
+.contact-form {
+  margin-top: 20px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.form-grid label {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-weight: 600;
+  color: #4d3f34;
+}
+
+.form-grid label span {
+  margin-bottom: 8px;
+}
+
+.form-grid input,
+.form-grid textarea {
+  width: 100%;
+  border: 1px solid #d4c2a8;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font: inherit;
+  color: #333;
+  background: #fffdf9;
+}
+
+.form-grid textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.contact-form button {
+  margin: 18px 0 0;
+  border: none;
+  border-radius: 999px;
+  background: #8a6e57;
+  color: #f8f6f2;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.contact-form button:hover {
+  transform: translateY(-2px);
+  background: #755a46;
+}
+
+.contact-info-card p {
+  line-height: 1.7;
+  color: #544637;
+}
+
+.scroll-top {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: #8a6e57;
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 768px) {
+  .contact-page-section {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 .footer-title {
   font-size: 1.1rem;
   margin: 0 0 12px;
@@ -1214,3 +1333,94 @@ button {
 }
 
 }
+
+.mail-animation {
+    position: fixed;
+    inset: 0;
+    background: rgba(248,246,242,0.95);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+}
+
+.mail-animation p {
+    margin-top: 30px;
+    font-family: "Playfair Display", serif;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+
+/* Enveloppe */
+
+.envelope {
+    width: 120px;
+    height: 80px;
+    background: white;
+    position: relative;
+    border: 2px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    animation: flyAway 2.5s ease forwards;
+}
+
+
+.flap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #eee;
+    clip-path: polygon(0 0, 100% 0, 50% 55%);
+    transform-origin: top;
+    animation: closeLetter 1s ease forwards;
+}
+
+
+.letter {
+    position: absolute;
+    width: 80%;
+    height: 60%;
+    background: white;
+    left: 10%;
+    top: 30%;
+    border: 1px solid #ddd;
+}
+
+
+/* Fermeture de l'enveloppe */
+
+@keyframes closeLetter {
+
+    from {
+        transform: rotateX(0deg);
+    }
+
+    to {
+        transform: rotateX(180deg);
+    }
+
+}
+
+
+/* Envol */
+
+@keyframes flyAway {
+
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    60% {
+        transform: translateY(-30px) scale(1.05);
+    }
+
+    100% {
+        transform: translateY(-300px) scale(0.5);
+        opacity: 0;
+    }
+
+}
+
