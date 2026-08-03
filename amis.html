@@ -29,8 +29,12 @@
         </svg>
     </div>
 </div>
-<main style="max-width:1100px;margin:40px auto;padding:0 20px;">
-    <p>Page galerie amis — contenu à venir.</p>
+<main class="category-page">
+    <section class="category-intro">
+        <p class="eyebrow">Amis & Évènements</p>
+        <h2>Des moments partagés, spontanés et plein de vie</h2>
+    </section>
+    <section class="category-grid" id="amisGallery" aria-label="Galerie amis"></section>
 </main>
 <img class="separator-image" src="images/double_text_separator (1).png" alt="Séparateur de texte" />
 <p class="footer-brand">@JADE.C PHOTOGRAPHIE</p>
@@ -39,5 +43,64 @@
     <p class="footer-title">Pour me contacter :</p>
 </footer>
 <script src="script.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { getFirestore, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCf7-hELe7UTM4qRrSP-BTFeySo2Zk_678",
+    authDomain: "jade-photographie.firebaseapp.com",
+    projectId: "jade-photographie",
+    storageBucket: "jade-photographie.firebasestorage.app",
+    messagingSenderId: "774610773034",
+    appId: "1:774610773034:web:6b1d57344eaa65dadf4f53"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const gallery = document.getElementById("amisGallery");
+
+async function chargerAmis() {
+    try {
+        const q = query(collection(db, "photos"), where("categorie", "==", "amis"), orderBy("ordre", "asc"));
+        const result = await getDocs(q);
+
+        result.forEach((doc, index) => {
+            const photo = doc.data();
+            let classe = "category-card";
+            // Créer une distribution masonry : certaines images occupent 2 colonnes x 2 rangées
+            if (index % 8 === 0 || index % 8 === 3) {
+                classe = "category-card category-card-large";
+            } else if (index % 8 === 6) {
+                classe = "category-card category-card-wide";
+            }
+
+            gallery.innerHTML += `
+                <figure class="${classe}">
+                    <img src="${photo.url}" alt="${photo.titre || 'Photo amis'}">
+                </figure>
+            `;
+        });
+    } catch (error) {
+        console.error("Erreur chargement amis :", error);
+    }
+}
+
+chargerAmis();
+</script>
+
+<button class="scroll-top" onclick="scrollToTop()" aria-label="Remonter en haut de la page">↑</button>
+
+<a href="https://pholy.fr/reservation/jcphotographie276?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPOTM2NjE5NzQzMzkyNDU5AAGn7gP3vV_mhta595Qe6hGwokBwGDLuOYlFeugllqA7YDcJVbPiWzk09FJ5tpw_aem_bLZaO95oNTSzq5IfuwygUQ"
+   class="reservation-btn"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="Réserver un shooting">
+
+    <i class="fa-solid fa-calendar-check"></i>
+    <span>Réserver</span>
+
+</a>
+
 </body>
 </html>
