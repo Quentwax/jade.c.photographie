@@ -11,10 +11,31 @@ function updateDots() {
 document.addEventListener("DOMContentLoaded", () => {
     dots = document.querySelectorAll(".dot");
     const galleryImages = document.querySelectorAll(".gallery-item img");
+    const orientationGalleries = document.querySelectorAll(".portraits-grid, .category-grid");
     const galleryModal = document.getElementById("gallery-modal");
     const galleryModalImage = document.getElementById("gallery-modal-image");
     const galleryModalClose = document.querySelector(".gallery-modal-close");
     const carouselMenus = document.querySelectorAll(".carousel-menu");
+
+    const updateImageOrientation = (image) => {
+        const card = image.closest(".portrait-card, .category-card");
+        if (!card || !image.naturalWidth || !image.naturalHeight) return;
+
+        card.classList.toggle("is-portrait", image.naturalHeight > image.naturalWidth);
+        card.classList.toggle("is-landscape", image.naturalWidth >= image.naturalHeight);
+    };
+
+    orientationGalleries.forEach((gallery) => {
+        const updateImages = () => {
+            gallery.querySelectorAll("img").forEach((image) => {
+                updateImageOrientation(image);
+                image.addEventListener("load", () => updateImageOrientation(image), { once: true });
+            });
+        };
+
+        updateImages();
+        new MutationObserver(updateImages).observe(gallery, { childList: true });
+    });
 
     carouselMenus.forEach((menu) => {
         const parent = menu.parentElement;
@@ -37,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
             menu.classList.remove("is-open");
             toggleButton.setAttribute("aria-expanded", "false");
             toggleButton.setAttribute("aria-label", "Ouvrir le menu");
+            document.body.classList.remove('menu-open');
         };
 
         const updateToggle = () => {
@@ -48,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         const isOpen = menu.classList.toggle("is-open");
                         toggleButton.setAttribute("aria-expanded", String(isOpen));
                         toggleButton.setAttribute("aria-label", isOpen ? "Fermer le menu" : "Ouvrir le menu");
+                        document.body.classList.toggle('menu-open', isOpen);
                     });
                 }
             } else {
@@ -55,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     toggleButton.remove();
                     toggleButton = null;
                     menu.classList.remove("is-open");
+                    document.body.classList.remove('menu-open');
                 }
             }
         };
@@ -66,6 +90,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 closeMenu();
             }
         });
+
+        // wire up explicit close button inside menu (if present)
+        const closeBtn = menu.querySelector('.carousel-menu-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeMenu(); });
+        }
 
         window.addEventListener("resize", () => {
             updateToggle();
@@ -116,8 +146,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && galleryModal && galleryModal.classList.contains("open")) {
-            closeGalleryModal();
+        if (event.key === "Escape") {
+            if (galleryModal && galleryModal.classList.contains("open")) {
+                closeGalleryModal();
+                return;
+            }
+            // if any mobile menu is open, close it
+            const menus = document.querySelectorAll('.carousel-menu.is-open');
+            if (menus.length) {
+                menus.forEach(m => m.classList.remove('is-open'));
+                document.querySelectorAll('.carousel-menu-toggle').forEach(b => b.setAttribute('aria-expanded', 'false'));
+                document.body.classList.remove('menu-open');
+            }
         }
     });
 

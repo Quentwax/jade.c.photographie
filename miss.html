@@ -65,18 +65,11 @@ async function chargerMiss() {
         const q = query(collection(db, "photos"), where("categorie", "==", "miss"), orderBy("ordre", "asc"));
         const result = await getDocs(q);
 
-        result.forEach((doc, index) => {
+        result.forEach((doc) => {
             const photo = doc.data();
-            let classe = "category-card";
-            // Créer une distribution masonry : certaines images occupent 2 colonnes x 2 rangées
-            if (index % 8 === 0 || index % 8 === 3) {
-                classe = "category-card category-card-large";
-            } else if (index % 8 === 6) {
-                classe = "category-card category-card-wide";
-            }
 
             gallery.innerHTML += `
-                <figure class="${classe}">
+                <figure class="category-card">
                     <img src="${photo.url}" alt="${photo.titre || 'Photo miss'}">
                 </figure>
             `;

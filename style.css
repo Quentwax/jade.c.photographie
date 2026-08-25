@@ -58,7 +58,9 @@
     line-height: 1;
     cursor: pointer;
     transition: transform 0.18s ease, color 0.18s ease;
-    z-index: 3;
+    z-index: 12001;
+    pointer-events: auto;
+    touch-action: manipulation;
 }
 
 .carousel-control:hover {
@@ -82,22 +84,33 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: clamp(12px, 2vw, 28px);
-    padding: 18px 20px;
+    gap: 32px;
+    padding: 24px 28px;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.22) 75%, rgba(0, 0, 0, 0));
 }
 
 .carousel-menu a {
     color: #fff;
     text-decoration: none;
-    font-size: clamp(0.9rem, 1.3vw, 1.05rem);
-    font-weight: 600;
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    font-weight: 700;
+    padding: 14px 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
     letter-spacing: 0.04em;
     text-transform: none;
 }
 
+/* hide overlay close button on desktop; shown in mobile via media query */
+.carousel-menu-close { display: none; }
+
+/* bottom-actions hidden by default (displayed only on small screens) */
+.bottom-actions { display: none; }
+
 .carousel-logo img {
-    width: clamp(60px, 8vw, 90px);
+    width: 150px;
     height: auto;
     display: block;
     object-fit: contain;
@@ -153,23 +166,48 @@
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
     }
 
+    /* when opened, turn into a full-screen white overlay with centered logo and links */
     .carousel-menu.is-open {
         display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 36px 22px;
+        border-radius: 0;
+        background: rgba(255,255,255,0.98);
+        z-index: 12003;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 18px;
+        overflow: auto;
+        pointer-events: auto;
     }
 
     .carousel-menu a {
         color: #4f3a2b;
-        font-size: 1rem;
-        padding: 10px 12px;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.78);
-        text-align: left;
+        font-size: 1.25rem;
+        padding: 12px 18px;
+        border-radius: 10px;
+        background: transparent;
+        text-align: center;
+        text-decoration: none;
     }
 
-    .carousel-menu a:hover {
-        background: rgba(255, 255, 255, 0.98);
-        color: #111;
-    }
+    .carousel-menu a:hover { color: #3a3027; }
+    .carousel-menu .carousel-logo { display:flex; margin: 10px 0; }
+
+    /* close button inside overlay (visible on mobile only) */
+    .carousel-menu-close { display: block; position: absolute; top: 18px; right: 18px; background: transparent; border: none; color: #4f3a2b; font-size: 1.6rem; z-index: 10001; cursor: pointer; }
+
+    /* lock page scroll when menu open */
+    body.menu-open { overflow: hidden; }
 
     .carousel-logo {
         display: flex;
@@ -178,7 +216,7 @@
     }
 
     .carousel-logo img {
-        width: 70px;
+        width: 80px;
     }
 
     .carousel-title {
@@ -190,6 +228,83 @@
         font-size: clamp(1.8rem, 8vw, 2.45rem);
         line-height: 1.08;
     }
+}
+
+/* Bottom actions: reservation + scroll-top share width on mobile */
+@media (max-width: 768px) {
+    .bottom-actions {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        gap: 0;
+        z-index: 11002;
+    }
+    .bottom-actions .reservation-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 12px;
+        background: #8a6e57;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+        border: none;
+        height: 56px;
+    }
+    .bottom-actions .scroll-top {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        color: #8a6e57;
+        border: none;
+        font-size: 1.25rem;
+        height: 56px;
+        cursor: pointer;
+    }
+    /* override standalone scroll-top positioning on mobile */
+    .scroll-top { position: static; right: auto; bottom: auto; width: auto; height: auto; border-radius: 0; box-shadow: none; }
+}
+
+
+/* Mobile tweaks: hide carousel controls and make room for the scroll-top button */
+@media (max-width: 768px) {
+    /* remove left/right carousel arrows on small screens */
+    .carousel-control { display: none !important; }
+
+    /* make reservation take remaining space and keep a fixed square for scroll-top */
+    .bottom-actions { padding-right: 8px; }
+    .bottom-actions .reservation-btn { flex: 1 1 auto; display:flex; align-items:center; justify-content:center; padding:14px 12px; }
+    .bottom-actions .scroll-top {
+        flex: 0 0 56px;
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+        background: #ffffff !important;
+        color: #8a6e57 !important;
+        z-index: 12005;
+        margin-left: 6px;
+    }
+}
+
+/* Make index gallery images smaller on mobile */
+@media (max-width: 768px) {
+    .gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 180px; gap: 10px; }
+    .gallery .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+/* Mobile gallery adjustments: reduce image heights for better layout, keep Jade image large */
+@media (max-width: 768px) {
+    .gallery-item img { height: 220px; object-fit: cover; }
+    .gallery-item img[src*="jade"] { height: 420px; }
 }
 
 
@@ -351,17 +466,16 @@ body.modal-open {
 
 .portraits-grid,
 .category-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-rows: 280px;
-    grid-auto-flow: dense;
-    gap: 18px;
-    align-items: stretch;
+    column-count: 3;
+    column-gap: 18px;
 }
 
 .portrait-card,
 .category-card {
     position: relative;
+    width: 100%;
+    min-height: 0;
+    margin: 0;
     overflow: hidden;
     border-radius: 16px;
     background: linear-gradient(135deg, #fff 0%, #f5ece3 100%);
@@ -371,36 +485,38 @@ body.modal-open {
     justify-content: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
     will-change: transform;
-}
-
-.portraits-grid .portrait-card:nth-child(2n),
-.category-grid .category-card:nth-child(2n) {
-    grid-column: span 2;
-    grid-row: span 2;
-}
-
-.portraits-grid .portrait-card:nth-child(3n),
-.category-grid .category-card:nth-child(3n) {
-    grid-column: span 2;
+    break-inside: avoid;
+    aspect-ratio: 4 / 3;
 }
 
 .portraits-grid .portrait-card-large,
 .category-grid .category-card-large {
-    grid-column: span 2;
-    grid-row: span 2;
+    grid-column: auto;
+    grid-row: auto;
 }
 
 .portraits-grid .portrait-card-wide,
 .category-grid .category-card-wide {
-    grid-column: span 3;
-    grid-row: span 1;
+    grid-column: auto;
+    grid-row: auto;
+}
+
+.portrait-card.is-portrait,
+.category-card.is-portrait {
+    aspect-ratio: 3 / 4;
+}
+
+.portrait-card.is-landscape,
+.category-card.is-landscape {
+    aspect-ratio: 4 / 3;
 }
 
 .portrait-card img,
 .category-card img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
     object-position: center center;
     display: block;
     transition: transform 0.35s ease, filter 0.35s ease;
@@ -446,11 +562,7 @@ body.modal-open {
 }
 
 .category-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-rows: 280px;
-    grid-auto-flow: dense;
-    gap: 18px;
+    margin-bottom: 0;
 }
 
 @media (max-width: 768px) {
@@ -458,9 +570,8 @@ body.modal-open {
 
     .portraits-grid,
     .category-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-auto-rows: 220px;
-        gap: 14px;
+        column-count: 1;
+        column-gap: 0;
     }
 
     .portrait-card,
@@ -834,7 +945,7 @@ footer {
     font-size: 1.3rem;
     cursor: pointer;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
-    z-index: 1000;
+    z-index: 11001;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1760,12 +1871,16 @@ button {
 
     .carousel-menu {
         flex-wrap: wrap;
-        gap: 8px 10px;
-        padding: 10px 12px;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .carousel-menu a {
+        padding: 14px 18px;
     }
 
     .carousel-logo img {
-        width: 56px;
+        width: 80px;
     }
 
     .carousel-title {
@@ -1830,7 +1945,7 @@ button {
     .portraits-grid,
     .category-grid {
         grid-template-columns: 1fr;
-        grid-auto-rows: minmax(220px, 56vw);
+        grid-auto-rows: auto;
         gap: 12px;
     }
 
@@ -1842,6 +1957,7 @@ button {
     .category-card-wide {
         grid-column: span 1;
         grid-row: span 1;
+        aspect-ratio: 4 / 3;
     }
 
     .portraits-intro h2,
