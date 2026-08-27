@@ -180,11 +180,23 @@ function previousImage() {
 <a class="gallery-button" href="portfolio.html">Voir la galerie</a>
 
 
-<video class="video-presentation" autoplay muted loop playsinline>
-    <source src="images/VID-20260721-WA0016.mp4" type="video/mp4">
-    Votre navigateur ne supporte pas la vidéo.
-</video>
-
+<div class="video-container"> 
+    <video id="video" autoplay muted loop playsinline> 
+        <source src="images/victoria&benjamin.mp4" type="video/mp4"> 
+    </video> 
+ 
+    <button id="muteBtn">🔇</button> 
+</div> 
+ 
+<script> 
+const video = document.getElementById("video"); 
+const muteBtn = document.getElementById("muteBtn"); 
+ 
+muteBtn.addEventListener("click", () => { 
+    video.muted = !video.muted; 
+    muteBtn.textContent = video.muted ? "🔇" : "🔊"; 
+}); 
+</script>
 
 <section class="reviews">
 
